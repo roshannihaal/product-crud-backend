@@ -8,7 +8,20 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   const key = err.message as keyof typeof ERROR_RESPONSE;
-  const data = ERROR_RESPONSE[key];
+
+  let data: {
+    message: string;
+    status: number;
+  };
+  if (key in ERROR_RESPONSE) {
+    data = ERROR_RESPONSE[key];
+  } else {
+    data = {
+      message: err.message,
+      status: 500,
+    };
+  }
+
   const response = {
     message: data.message,
     name: err.name,

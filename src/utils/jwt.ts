@@ -1,15 +1,27 @@
 import jwt from "jsonwebtoken";
-import { IUser } from "../schemas";
+import { IJwtUser, TokenSchema } from "../schemas";
 import { config } from "../config";
+import { ERROR_RESPONSE } from "./errorResponse";
 
-export const generateJwt = (user: IUser) => {
+export const generateJwt = (user: IJwtUser) => {
   const data = {
     id: user.id,
     email: user.email,
-    created_at: user.created_at,
   };
   const token = jwt.sign({ data }, config.JWT_SECRET, {
     expiresIn: config.JWT_VALIDITY,
   });
   return token;
+};
+
+export const validateJwt = (token: string) => {
+  try {
+    const decoded = jwt.verify(token, config.JWT_SECRET);
+    const result = TokenSchema.parse(decoded);
+    return result;
+  } catch (err) {
+    throw new Error(
+      ERROR_RESPONSE.MISSING_OR_INVALID_AUTHORIZATION_HEADER.code
+    );
+  }
 };

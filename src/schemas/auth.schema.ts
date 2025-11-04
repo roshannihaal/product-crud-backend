@@ -9,6 +9,9 @@ export const UserSchema = z.object({
 });
 export type IUser = z.infer<typeof UserSchema>;
 
+export const JwtUserSchema = UserSchema.pick({ id: true, email: true });
+export type IJwtUser = z.infer<typeof JwtUserSchema>;
+
 export const SignupSchema = z.object({
   body: UserSchema.pick({
     email: true,

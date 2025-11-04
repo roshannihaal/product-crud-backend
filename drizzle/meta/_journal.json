@@ -15,6 +15,20 @@
       "when": 1762248134552,
       "tag": "0001_fast_greymalkin",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1762254467303,
+      "tag": "0002_wooden_sunset_bain",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1762254515208,
+      "tag": "0003_dizzy_pepper_potts",
+      "breakpoints": true
     }
   ]
 }

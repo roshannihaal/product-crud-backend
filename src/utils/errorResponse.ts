@@ -14,4 +14,14 @@ export const ERROR_RESPONSE = {
     message: "Invalid email or password",
     status: 401,
   },
+  CATEGORY_NOT_FOUND: {
+    code: "CATEGORY_NOT_FOUND",
+    message: "Category not found",
+    status: 404,
+  },
+  MISSING_OR_INVALID_AUTHORIZATION_HEADER: {
+    code: "MISSING_OR_INVALID_AUTHORIZATION_HEADER",
+    message: "Missing or invalid authorization header",
+    status: 401,
+  },
 };
