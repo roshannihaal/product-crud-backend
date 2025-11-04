@@ -7,13 +7,26 @@ export {
 } from "./category.schema";
 export { TokenSchema } from "./jwt.schema";
 export { PaginationSchema } from "./pagination.schema";
-
+export {
+  CreateProductSchema,
+  GetProductSchema,
+  UpdateProductSchema,
+  DeleteProductSchema,
+} from "./product.schema";
 export type { ISignup, ILogin, IJwtUser } from "./auth.schema";
 export type {
   ICreateCategory,
   IGetCategory,
   IUpdateCategoryBody,
+  IUpdateCategoryParams,
   IDeleteCategory,
 } from "./category.schema";
 export type { IToken } from "./jwt.schema";
 export type { IPagination } from "./pagination.schema";
+export type {
+  ICreateProduct,
+  IGetProduct,
+  IUpdateProductBody,
+  IUpdateProductParams,
+  IDeleteProduct,
+} from "./product.schema";

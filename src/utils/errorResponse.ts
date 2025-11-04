@@ -24,4 +24,9 @@ export const ERROR_RESPONSE = {
     message: "Missing or invalid authorization header",
     status: 401,
   },
+  PRODUCT_NOT_FOUND: {
+    code: "PRODUCT_NOT_FOUND",
+    message: "Product not found",
+    status: 404,
+  },
 };

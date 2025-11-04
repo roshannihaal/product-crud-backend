@@ -1,1 +1,8 @@
-export { usersTable, categoriesTable } from "./schema";
+export {
+  usersTable,
+  usersRelation,
+  categoriesTable,
+  categoriesRelation,
+  productsTable,
+  productsRelations,
+} from "./schema";

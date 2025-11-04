@@ -93,7 +93,12 @@ export class CategoryRepository {
     try {
       const result = await db
         .delete(categoriesTable)
-        .where(eq(categoriesTable.id, id))
+        .where(
+          and(
+            eq(categoriesTable.id, id),
+            eq(categoriesTable.created_by, this.user.id)
+          )
+        )
         .returning();
       if (result.length === 0) {
         throw new Error(ERROR_RESPONSE.CATEGORY_NOT_FOUND.code);

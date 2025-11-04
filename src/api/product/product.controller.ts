@@ -1,16 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 import {
-  ICreateCategory,
-  IGetCategory,
+  ICreateProduct,
+  IGetProduct,
   IPagination,
-  IDeleteCategory,
-  IUpdateCategoryBody,
-  IUpdateCategoryParams,
+  IDeleteProduct,
+  IUpdateProductBody,
+  IUpdateProductParams,
 } from "../../schemas";
-import { CategoryRepository } from "../../repositories";
+import { ProductRepository } from "../../repositories";
 
 export const create = async (
-  req: Request<unknown, unknown, ICreateCategory>,
+  req: Request<unknown, unknown, ICreateProduct>,
   res: Response,
   next: NextFunction
 ) => {
@@ -19,12 +19,12 @@ export const create = async (
     if (!user) {
       throw new Error();
     }
-    const categoryRepository = new CategoryRepository(user);
-    const result = await categoryRepository.create(body);
+    const productRepository = new ProductRepository(user);
+    const result = await productRepository.create(body);
     const response = {
-      message: "Category created",
+      message: "Product created",
       data: {
-        category: result,
+        product: result,
       },
     };
     res.status(201).send(response);
@@ -34,7 +34,7 @@ export const create = async (
 };
 
 export const get = async (
-  req: Request<IGetCategory>,
+  req: Request<IGetProduct>,
   res: Response,
   next: NextFunction
 ) => {
@@ -43,12 +43,12 @@ export const get = async (
     if (!user) {
       throw new Error();
     }
-    const categoryRepository = new CategoryRepository(user);
-    const result = await categoryRepository.get(params.id);
+    const productRepository = new ProductRepository(user);
+    const result = await productRepository.get(params.id);
     const response = {
-      message: "Category fetched",
+      message: "Product fetched",
       data: {
-        category: result,
+        product: result,
       },
     };
     res.status(200).send(response);
@@ -69,12 +69,12 @@ export const getAll = async (
       throw new Error();
     }
 
-    const categoryRepository = new CategoryRepository(user);
-    const result = await categoryRepository.getAll(query.limit, query.offset);
+    const productRepository = new ProductRepository(user);
+    const result = await productRepository.getAll(query.limit, query.offset);
     const response = {
-      message: "Category fetched",
+      message: "Product fetched",
       data: {
-        category: result,
+        product: result,
       },
     };
     res.status(200).send(response);
@@ -84,7 +84,7 @@ export const getAll = async (
 };
 
 export const update = async (
-  req: Request<IUpdateCategoryParams, unknown, IUpdateCategoryBody>,
+  req: Request<IUpdateProductParams, unknown, IUpdateProductBody>,
   res: Response,
   next: NextFunction
 ) => {
@@ -93,12 +93,12 @@ export const update = async (
     if (!user) {
       throw new Error();
     }
-    const categoryRepository = new CategoryRepository(user);
-    const result = await categoryRepository.update(params.id, body);
+    const productRepository = new ProductRepository(user);
+    const result = await productRepository.update(params.id, body);
     const response = {
-      message: "Category updated",
+      message: "Product updated",
       data: {
-        category: result,
+        product: result,
       },
     };
     res.status(200).send(response);
@@ -107,8 +107,8 @@ export const update = async (
   }
 };
 
-export const deleteCategory = async (
-  req: Request<IDeleteCategory>,
+export const deleteProduct = async (
+  req: Request<IDeleteProduct>,
   res: Response,
   next: NextFunction
 ) => {
@@ -117,10 +117,10 @@ export const deleteCategory = async (
     if (!user) {
       throw new Error();
     }
-    const categoryRepository = new CategoryRepository(user);
-    await categoryRepository.delete(params.id);
+    const productRepository = new ProductRepository(user);
+    await productRepository.delete(params.id);
     const response = {
-      message: "Category deleted",
+      message: "Product deleted",
     };
     res.status(200).send(response);
   } catch (err) {
