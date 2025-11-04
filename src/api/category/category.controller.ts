@@ -70,7 +70,11 @@ export const getAll = async (
     }
 
     const categoryRepository = new CategoryRepository(user);
-    const result = await categoryRepository.getAll(query.limit, query.offset);
+    const result = await categoryRepository.getAll(
+      query.limit,
+      query.offset,
+      query.search
+    );
     const response = {
       message: "Category fetched",
       data: {

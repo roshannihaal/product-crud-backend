@@ -1,5 +1,5 @@
-import { and, eq } from "drizzle-orm";
-import { categoriesTable, productsTable } from "../db";
+import { and, eq, ilike } from "drizzle-orm";
+import { productsTable } from "../db";
 import { ICreateProduct, IJwtUser, IUpdateProductBody } from "../schemas";
 import { db, ERROR_RESPONSE } from "../utils";
 import { CategoryRepository } from "./category.repository";
@@ -46,13 +46,19 @@ export class ProductRepository {
     }
   }
 
-  async getAll(limit: string, offset: string) {
+  async getAll(limit: string, offset: string, search: string | undefined) {
     try {
       const take = parseInt(limit);
       const start = parseInt(offset);
 
+      const filter = [eq(productsTable.created_by, this.user.id)];
+
+      if (search) {
+        filter.push(ilike(productsTable.name, `%${search}%`));
+      }
+
       const result = await db.query.productsTable.findMany({
-        where: eq(productsTable.created_by, this.user.id),
+        where: and(...filter),
         with: {
           category: {
             columns: {

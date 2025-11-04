@@ -70,7 +70,11 @@ export const getAll = async (
     }
 
     const productRepository = new ProductRepository(user);
-    const result = await productRepository.getAll(query.limit, query.offset);
+    const result = await productRepository.getAll(
+      query.limit,
+      query.offset,
+      query.search
+    );
     const response = {
       message: "Product fetched",
       data: {

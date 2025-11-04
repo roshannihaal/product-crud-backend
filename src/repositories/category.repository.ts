@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, ilike } from "drizzle-orm";
 import { categoriesTable } from "../db";
 import { ICreateCategory, IJwtUser, IUpdateCategoryBody } from "../schemas";
 import { db, ERROR_RESPONSE } from "../utils";
@@ -44,13 +44,19 @@ export class CategoryRepository {
     }
   }
 
-  async getAll(limit: string, offset: string) {
+  async getAll(limit: string, offset: string, search: string | undefined) {
     try {
       const take = parseInt(limit);
       const start = parseInt(offset);
 
+      const filter = [eq(categoriesTable.created_by, this.user.id)];
+
+      if (search) {
+        filter.push(ilike(categoriesTable.name, `%${search}%`));
+      }
+
       const result = await db.query.categoriesTable.findMany({
-        where: eq(categoriesTable.created_by, this.user.id),
+        where: and(...filter),
         limit: take,
         offset: start,
       });
