@@ -21,15 +21,9 @@ export class UserRepository {
         password: hashPassword(data.password),
         updated_at: new Date(),
       };
-      const result = await db.insert(usersTable).values(user).returning({
-        id: usersTable.id,
-        email: usersTable.email,
-        created_at: usersTable.created_at,
-        updated_at: usersTable.updated_at,
-      });
+      const result = await db.insert(usersTable).values(user).returning();
       return result[0];
     } catch (err) {
-      console.log(err);
       throw err;
     }
   }
