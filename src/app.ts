@@ -1,5 +1,7 @@
 import express, { json } from "express";
 import cors from "cors";
+import { apiRouter } from "./api";
+import { errorHandler, notFound } from "./middlewares";
 
 const app = express();
 
@@ -12,5 +14,10 @@ app.get("/api", (req, res) => {
   };
   res.status(200).send(response);
 });
+
+app.use("/api", apiRouter);
+
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
