@@ -3,9 +3,11 @@ import { productsTable } from "../db";
 import { ICreateProduct, IJwtUser, IUpdateProductBody } from "../schemas";
 import { db, ERROR_RESPONSE } from "../utils";
 import { CategoryRepository } from "./category.repository";
-
+import fs from "fs";
+import csv from "csv-parser";
 export class ProductRepository {
   private user: IJwtUser;
+  private readonly batch_size = 500;
 
   constructor(user: IJwtUser) {
     this.user = user;
@@ -21,6 +23,22 @@ export class ProductRepository {
       };
       const result = await db.insert(productsTable).values(product).returning();
       return result[0];
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async bulkCreate(filepath: string) {
+    try {
+      const rows = await this.validateCSV(filepath);
+      console.log(rows);
+
+      for (let i = 0; i < rows.length; i += this.batch_size) {
+        const batch = rows.slice(i, i + this.batch_size);
+        await db.insert(productsTable).values(batch);
+      }
+
+      return `${rows.length} products created`;
     } catch (err) {
       throw err;
     }
@@ -129,6 +147,68 @@ export class ProductRepository {
     try {
       const categoryRepository = new CategoryRepository(this.user);
       await categoryRepository.get(category_id);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  private async validateCSV(filepath: string): Promise<
+    {
+      name: string;
+      price: number;
+      category_id: string;
+      created_by: string;
+      updated_at: Date;
+    }[]
+  > {
+    try {
+      const categoryRepository = new CategoryRepository(this.user);
+      const category_ids = await categoryRepository.getUserCategoryIds();
+      console.log(category_ids);
+
+      return new Promise((resolve, reject) => {
+        const valid_rows: any[] = [];
+        const invalid_rows: any[] = [];
+        fs.createReadStream(filepath)
+          .pipe(csv())
+          .on("data", (row) => {
+            let { name, price, category_id } = row;
+            if (!name) {
+              invalid_rows.push({
+                error: ERROR_RESPONSE.INVALID_PRODUCT_NAME,
+                row,
+              });
+            } else if (!price || isNaN(Number(price))) {
+              invalid_rows.push({
+                error: ERROR_RESPONSE.INVALID_PRODUCT_PRICE,
+                row,
+              });
+            } else if (!category_id || !category_ids.includes(category_id)) {
+              invalid_rows.push({
+                error: ERROR_RESPONSE.INVALID_PRODUCT_CATEOGORY_ID,
+                row,
+              });
+            } else {
+              const data = {
+                name,
+                price,
+                category_id,
+                created_by: this.user.id,
+                updated_at: new Date(),
+              };
+              valid_rows.push(data);
+            }
+          })
+          .on("end", () => {
+            if (invalid_rows.length) {
+              reject({
+                message: ERROR_RESPONSE.CSV_CONTAINS_INVALID_ROWS.code,
+              });
+            }
+            resolve(valid_rows);
+          })
+          .on("error", (err) => reject(err));
+      });
     } catch (err) {
       throw err;
     }

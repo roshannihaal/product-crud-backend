@@ -41,6 +41,31 @@ export const create = async (
   }
 };
 
+export const createBulk = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user, file } = req;
+  try {
+    if (!user) {
+      throw new Error();
+    }
+    if (!file) {
+      throw new Error(ERROR_RESPONSE.NO_FILE_UPLOADED.code);
+    }
+    const productRepository = new ProductRepository(user);
+    const result = await productRepository.bulkCreate(file.path);
+    const response = {
+      message: result,
+    };
+    fs.unlinkSync(file.path);
+    res.status(201).send(response);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const get = async (
   req: Request<IGetProduct>,
   res: Response,

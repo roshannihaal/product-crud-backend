@@ -34,4 +34,34 @@ export const ERROR_RESPONSE = {
     message: "Product image not found",
     status: 404,
   },
+  NO_FILE_UPLOADED: {
+    code: "NO_FILE_UPLOADED",
+    message: "No file uploaded",
+    status: 400,
+  },
+  USER_DOESNT_HAVE_ANY_CATEGORIES: {
+    code: "USER_DOESNT_HAVE_ANY_CATEGORIES",
+    message: "User doesn't have any categories",
+    status: 400,
+  },
+  INVALID_PRODUCT_NAME: {
+    code: "INVALID_PRODUCT_NAME",
+    message: "Contains invalid name",
+    status: 400,
+  },
+  INVALID_PRODUCT_PRICE: {
+    code: "INVALID_PRODUCT_PRICE",
+    message: "Contains invalid price",
+    status: 400,
+  },
+  INVALID_PRODUCT_CATEOGORY_ID: {
+    code: "INVALID_PRODUCT_CATEOGORY_ID",
+    message: "Contains invalid category id",
+    status: 400,
+  },
+  CSV_CONTAINS_INVALID_ROWS: {
+    code: "CSV_CONTAINS_INVALID_ROWS",
+    message: "CSV contains invalid rows",
+    status: 400,
+  },
 };

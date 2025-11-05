@@ -1,10 +1,16 @@
 import { Router } from "express";
 import * as controller from "./product.controller";
-import { authenticate, upload } from "../../middlewares";
+import { authenticate, csvUpload, upload } from "../../middlewares";
 
 const router = Router();
 
 router.post("/", authenticate, upload.single("image"), controller.create);
+router.post(
+  "/bulk",
+  authenticate,
+  csvUpload.single("file"),
+  controller.createBulk
+);
 router.get("/all", authenticate, controller.getAll);
 router.get("/:id/image", authenticate, controller.getImage);
 router.get("/:id", authenticate, controller.get);

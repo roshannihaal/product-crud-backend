@@ -113,4 +113,21 @@ export class CategoryRepository {
       throw err;
     }
   }
+
+  async getUserCategoryIds() {
+    try {
+      const result = await db.query.categoriesTable.findMany({
+        where: eq(categoriesTable.created_by, this.user.id),
+        columns: {
+          id: true,
+        },
+      });
+      if (result.length === 0) {
+        throw new Error(ERROR_RESPONSE.USER_DOESNT_HAVE_ANY_CATEGORIES.code);
+      }
+      return result.map((res) => res.id);
+    } catch (err) {
+      throw err;
+    }
+  }
 }
