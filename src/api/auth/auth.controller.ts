@@ -2,6 +2,8 @@ import { UserRepository } from "../../repositories";
 import { ILogin, ISignup } from "../../schemas";
 import { Request, Response, NextFunction } from "express";
 import { ERROR_RESPONSE, generateJwt, validatePassword } from "../../utils";
+import path from "path";
+import fs from "fs";
 
 export const signup = async (
   req: Request<unknown, unknown, ISignup>,
@@ -53,6 +55,22 @@ export const login = async (
     const response = {
       message: "User logged in",
       data: { user, token: generateJwt(result) },
+    };
+    res.status(200).send(response);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const publicKey = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const key_path = path.join(process.cwd(), "keys", "public_key.pem");
+    const public_key = fs.readFileSync(key_path, "utf-8");
+    const response = {
+      message: "Public key fetched",
+      data: {
+        public_key,
+      },
     };
     res.status(200).send(response);
   } catch (err) {

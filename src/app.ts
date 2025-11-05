@@ -3,6 +3,7 @@ import cors from "cors";
 import { apiRouter } from "./api";
 import { errorHandler, notFound } from "./middlewares";
 import path from "path";
+import { generateKeys } from "./utils";
 
 const app = express();
 
@@ -21,5 +22,7 @@ app.use("/api", apiRouter);
 
 app.use(notFound);
 app.use(errorHandler);
+
+generateKeys();
 
 export default app;
