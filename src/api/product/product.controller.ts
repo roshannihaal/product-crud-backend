@@ -109,7 +109,9 @@ export const getAll = async (
       query.category_id,
       query.limit,
       query.offset,
-      query.search
+      query.search,
+      query.sort_by,
+      query.sort_order
     );
     const response = {
       message: "Product fetched",

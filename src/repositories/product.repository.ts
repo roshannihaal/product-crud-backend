@@ -72,7 +72,9 @@ export class ProductRepository {
     category_id: string | undefined,
     limit: string,
     offset: string,
-    search: string | undefined
+    search: string | undefined,
+    sort_by: string | undefined,
+    sort_order: string | undefined
   ) {
     try {
       const take = parseInt(limit);
@@ -88,9 +90,20 @@ export class ProductRepository {
         filter.push(ilike(productsTable.name, `%${search}%`));
       }
 
+      const order: any = {};
+      if (sort_by && sort_order) {
+        order[sort_by as keyof typeof productsTable] =
+          sort_order.toLowerCase() === "asc" ? "asc" : "desc";
+      } else {
+        order["created_at"] = "asc";
+      }
+
       const result = await db.query.productsTable.findMany({
         where: and(...filter),
-        orderBy: (productsTable, { asc }) => [asc(productsTable.created_at)],
+        orderBy: (productsTable, { asc, desc }) => {
+          const field = (productsTable as any)[sort_by || "created_at"];
+          return sort_order === "desc" ? [desc(field)] : [asc(field)];
+        },
         limit: take,
         offset: start,
       });
