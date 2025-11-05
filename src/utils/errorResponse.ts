@@ -29,4 +29,9 @@ export const ERROR_RESPONSE = {
     message: "Product not found",
     status: 404,
   },
+  PRODUCT_IMAGE_NOT_FOUND: {
+    code: "PRODUCT_IMAGE_NOT_FOUND",
+    message: "Product image not found",
+    status: 404,
+  },
 };

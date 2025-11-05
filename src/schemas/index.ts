@@ -10,6 +10,7 @@ export { PaginationSchema } from "./pagination.schema";
 export {
   CreateProductSchema,
   GetProductSchema,
+  GetProductImageSchema,
   UpdateProductSchema,
   DeleteProductSchema,
 } from "./product.schema";
@@ -26,6 +27,7 @@ export type { IPagination } from "./pagination.schema";
 export type {
   ICreateProduct,
   IGetProduct,
+  IGetProductImage,
   IUpdateProductBody,
   IUpdateProductParams,
   IDeleteProduct,

@@ -28,6 +28,9 @@ export const GetProductSchema = z.object({
 });
 export type IGetProduct = z.infer<typeof GetProductSchema>["params"];
 
+export const GetProductImageSchema = GetProductSchema;
+export type IGetProductImage = z.infer<typeof GetProductImageSchema>["params"];
+
 export const UpdateProductSchema = z.object({
   params: GetProductSchema.shape.params,
   body: ProductSchema.pick({
