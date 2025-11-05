@@ -64,12 +64,21 @@ export class ProductRepository {
     }
   }
 
-  async getAll(limit: string, offset: string, search: string | undefined) {
+  async getAll(
+    category_id: string | undefined,
+    limit: string,
+    offset: string,
+    search: string | undefined
+  ) {
     try {
       const take = parseInt(limit);
       const start = parseInt(offset);
 
       const filter = [eq(productsTable.created_by, this.user.id)];
+
+      if (category_id) {
+        filter.push(eq(productsTable.category_id, category_id));
+      }
 
       if (search) {
         filter.push(ilike(productsTable.name, `%${search}%`));
@@ -77,14 +86,6 @@ export class ProductRepository {
 
       const result = await db.query.productsTable.findMany({
         where: and(...filter),
-        with: {
-          category: {
-            columns: {
-              id: true,
-              name: true,
-            },
-          },
-        },
         limit: take,
         offset: start,
       });

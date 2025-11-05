@@ -11,6 +11,7 @@ export {
   CreateProductSchema,
   GetProductSchema,
   GetProductImageSchema,
+  GetAllProductSchema,
   UpdateProductSchema,
   DeleteProductSchema,
 } from "./product.schema";
@@ -28,6 +29,7 @@ export type {
   ICreateProduct,
   IGetProduct,
   IGetProductImage,
+  IGetAllProduct,
   IUpdateProductBody,
   IUpdateProductParams,
   IDeleteProduct,

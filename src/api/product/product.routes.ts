@@ -12,6 +12,7 @@ router.post(
   controller.createBulk
 );
 router.get("/all", authenticate, controller.getAll);
+router.get("/:category_id/all", authenticate, controller.getAll);
 router.get("/:id/image", authenticate, controller.getImage);
 router.get("/:id", authenticate, controller.get);
 router.put("/:id", authenticate, upload.single("image"), controller.update);

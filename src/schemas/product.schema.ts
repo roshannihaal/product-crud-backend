@@ -28,6 +28,13 @@ export const GetProductSchema = z.object({
 });
 export type IGetProduct = z.infer<typeof GetProductSchema>["params"];
 
+export const GetAllProductSchema = z.object({
+  params: z.object({
+    category_id: z.uuid().trim(),
+  }),
+});
+export type IGetAllProduct = z.infer<typeof GetAllProductSchema>["params"];
+
 export const GetProductImageSchema = GetProductSchema;
 export type IGetProductImage = z.infer<typeof GetProductImageSchema>["params"];
 

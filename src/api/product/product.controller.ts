@@ -7,6 +7,7 @@ import {
   IUpdateProductBody,
   IUpdateProductParams,
   IGetProductImage,
+  IGetAllProduct,
 } from "../../schemas";
 import { ProductRepository } from "../../repositories";
 import fs from "fs";
@@ -91,11 +92,11 @@ export const get = async (
 };
 
 export const getAll = async (
-  req: Request<unknown, unknown, unknown, IPagination>,
+  req: Request<IGetAllProduct, unknown, unknown, IPagination>,
   res: Response,
   next: NextFunction
 ) => {
-  const { query, user } = req;
+  const { params, query, user } = req;
 
   try {
     if (!user) {
@@ -104,6 +105,7 @@ export const getAll = async (
 
     const productRepository = new ProductRepository(user);
     const result = await productRepository.getAll(
+      params.category_id,
       query.limit,
       query.offset,
       query.search
