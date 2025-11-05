@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ERROR_RESPONSE } from "../utils";
+import { ZodError } from "zod";
 
 export const errorHandler = (
   err: Error,
@@ -16,10 +17,17 @@ export const errorHandler = (
   if (key in ERROR_RESPONSE) {
     data = ERROR_RESPONSE[key];
   } else {
-    data = {
-      message: err.message,
-      status: 500,
-    };
+    if (err instanceof ZodError) {
+      data = {
+        message: err.message,
+        status: 400,
+      };
+    } else {
+      data = {
+        message: err.message,
+        status: 500,
+      };
+    }
   }
 
   const response = {
