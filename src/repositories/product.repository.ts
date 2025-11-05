@@ -36,7 +36,6 @@ export class ProductRepository {
   async bulkCreate(filepath: string) {
     try {
       const rows = await this.validateCSV(filepath);
-      console.log(rows);
 
       for (let i = 0; i < rows.length; i += this.batch_size) {
         const batch = rows.slice(i, i + this.batch_size);
@@ -219,7 +218,6 @@ export class ProductRepository {
     try {
       const categoryRepository = new CategoryRepository(this.user);
       const category_ids = await categoryRepository.getUserCategoryIds();
-      console.log(category_ids);
 
       return new Promise((resolve, reject) => {
         const valid_rows: any[] = [];

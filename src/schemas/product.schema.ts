@@ -6,7 +6,7 @@ const ProductSchema = z.object({
   category_id: z.uuid(),
   name: z.string().trim(),
   image: z.string().trim().optional(),
-  price: z.number().min(1),
+  price: z.coerce.number().min(1),
   created_by: z.string().trim(),
   created_at: z.date(),
   updated_at: z.date(),
