@@ -1,6 +1,11 @@
 import { and, eq, ilike } from "drizzle-orm";
 import { productsTable } from "../db";
-import { ICreateProduct, IJwtUser, IUpdateProductBody } from "../schemas";
+import {
+  ICreateProduct,
+  ICSVSchema,
+  IJwtUser,
+  IUpdateProductBody,
+} from "../schemas";
 import { db, ERROR_RESPONSE } from "../utils";
 import { CategoryRepository } from "./category.repository";
 import fs from "fs";
@@ -91,6 +96,55 @@ export class ProductRepository {
       });
 
       return result;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async dowload(category_id: string | undefined): Promise<ICSVSchema[]> {
+    try {
+      const filter = [eq(productsTable.created_by, this.user.id)];
+
+      if (category_id) {
+        filter.push(eq(productsTable.category_id, category_id));
+      }
+
+      const result = await db.query.productsTable.findMany({
+        where: and(...filter),
+        columns: {
+          category_id: false,
+        },
+        with: {
+          category: {
+            columns: {
+              id: true,
+              name: true,
+            },
+          },
+          user: {
+            columns: {
+              email: true,
+            },
+          },
+        },
+      });
+
+      const parsed = result.map((res) => {
+        const data = {
+          name: res.name,
+          id: res.id,
+          updated_at: res.updated_at,
+          created_at: res.created_at,
+          created_by: res.user.email,
+          image: res.image || undefined,
+          price: res.price,
+          category_id: res.category.id,
+          category_name: res.category.name,
+        };
+        return data;
+      });
+
+      return parsed;
     } catch (err) {
       throw err;
     }

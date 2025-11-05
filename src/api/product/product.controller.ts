@@ -8,11 +8,12 @@ import {
   IUpdateProductParams,
   IGetProductImage,
   IGetAllProduct,
+  IDownloadProduct,
 } from "../../schemas";
 import { ProductRepository } from "../../repositories";
 import fs from "fs";
 import path from "path";
-import { ERROR_RESPONSE } from "../../utils";
+import { ERROR_RESPONSE, writeCSV } from "../../utils";
 
 export const create = async (
   req: Request<unknown, unknown, ICreateProduct>,
@@ -92,11 +93,11 @@ export const get = async (
 };
 
 export const getAll = async (
-  req: Request<IGetAllProduct, unknown, unknown, IPagination>,
+  req: Request<unknown, unknown, unknown, IGetAllProduct>,
   res: Response,
   next: NextFunction
 ) => {
-  const { params, query, user } = req;
+  const { query, user } = req;
 
   try {
     if (!user) {
@@ -105,7 +106,7 @@ export const getAll = async (
 
     const productRepository = new ProductRepository(user);
     const result = await productRepository.getAll(
-      params.category_id,
+      query.category_id,
       query.limit,
       query.offset,
       query.search
@@ -146,6 +147,40 @@ export const getImage = async (
     res.sendFile(filePath);
   } catch (err) {
     next(err);
+  }
+};
+
+export const download = async (
+  req: Request<unknown, unknown, unknown, IDownloadProduct>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { query, user } = req;
+
+  try {
+    if (!user) {
+      throw new Error();
+    }
+
+    const productRepository = new ProductRepository(user);
+    const result = await productRepository.dowload(query.category_id);
+    let filepath = await writeCSV(result);
+    if (!filepath) {
+      throw new Error(ERROR_RESPONSE.CSV_GENERATION_FAILED.code);
+    }
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", `attachment; filename="products.csv"`);
+
+    res.download(filepath, "products.csv", (err) => {
+      if (err) {
+        next(err);
+      } else {
+        fs.unlink(filepath, () => {});
+      }
+    });
+  } catch (err) {
+    throw err;
   }
 };
 

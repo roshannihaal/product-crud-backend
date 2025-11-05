@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PaginationSchema } from "./pagination.schema";
 
 const ProductSchema = z.object({
   id: z.uuid(),
@@ -29,11 +30,32 @@ export const GetProductSchema = z.object({
 export type IGetProduct = z.infer<typeof GetProductSchema>["params"];
 
 export const GetAllProductSchema = z.object({
-  params: z.object({
-    category_id: z.uuid().trim(),
+  query: PaginationSchema.shape.query.extend({
+    category_id: z.uuid().optional(),
   }),
 });
-export type IGetAllProduct = z.infer<typeof GetAllProductSchema>["params"];
+export type IGetAllProduct = z.infer<typeof GetAllProductSchema>["query"];
+
+export const DownloadProductSchema = z.object({
+  query: z.object({
+    category_id: z.uuid().trim().optional(),
+  }),
+});
+export type IDownloadProduct = z.infer<typeof DownloadProductSchema>["query"];
+
+export const CSVSchema = z.object({
+  id: z.uuid(),
+  category_id: z.uuid(),
+  category_name: z.string(),
+  name: z.string().trim(),
+  image: z.string().trim().optional(),
+  price: z.number().min(1),
+  created_by: z.string().trim(),
+  created_at: z.date(),
+  updated_at: z.date(),
+});
+
+export type ICSVSchema = z.infer<typeof CSVSchema>;
 
 export const GetProductImageSchema = GetProductSchema;
 export type IGetProductImage = z.infer<typeof GetProductImageSchema>["params"];

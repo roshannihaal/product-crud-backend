@@ -64,4 +64,9 @@ export const ERROR_RESPONSE = {
     message: "CSV contains invalid rows",
     status: 400,
   },
+  CSV_GENERATION_FAILED: {
+    code: "CSV_GENERATION_FAILED",
+    message: "CSV generation failed",
+    status: 400,
+  },
 };

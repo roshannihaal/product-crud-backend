@@ -12,6 +12,8 @@ export {
   GetProductSchema,
   GetProductImageSchema,
   GetAllProductSchema,
+  DownloadProductSchema,
+  CSVSchema,
   UpdateProductSchema,
   DeleteProductSchema,
 } from "./product.schema";
@@ -30,6 +32,8 @@ export type {
   IGetProduct,
   IGetProductImage,
   IGetAllProduct,
+  IDownloadProduct,
+  ICSVSchema,
   IUpdateProductBody,
   IUpdateProductParams,
   IDeleteProduct,
