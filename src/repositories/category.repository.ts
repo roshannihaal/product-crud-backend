@@ -57,6 +57,10 @@ export class CategoryRepository {
 
       const result = await db.query.categoriesTable.findMany({
         where: and(...filter),
+        orderBy: (categoriesTable, { asc }) => [
+          asc(categoriesTable.created_at),
+        ],
+
         limit: take,
         offset: start,
       });
@@ -89,7 +93,7 @@ export class CategoryRepository {
         throw new Error(ERROR_RESPONSE.CATEGORY_NOT_FOUND.code);
       }
 
-      return result;
+      return result[0];
     } catch (err) {
       throw err;
     }

@@ -90,6 +90,7 @@ export class ProductRepository {
 
       const result = await db.query.productsTable.findMany({
         where: and(...filter),
+        orderBy: (productsTable, { asc }) => [asc(productsTable.created_at)],
         limit: take,
         offset: start,
       });
@@ -172,7 +173,7 @@ export class ProductRepository {
         throw new Error(ERROR_RESPONSE.PRODUCT_NOT_FOUND.code);
       }
 
-      return result;
+      return result[0];
     } catch (err) {
       throw err;
     }

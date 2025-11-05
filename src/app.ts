@@ -2,11 +2,13 @@ import express, { json } from "express";
 import cors from "cors";
 import { apiRouter } from "./api";
 import { errorHandler, notFound } from "./middlewares";
+import path from "path";
 
 const app = express();
 
 app.use(json());
 app.use(cors());
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.get("/api", (req, res) => {
   const response = {
